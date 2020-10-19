@@ -24,6 +24,12 @@ resource "helm_release" "cert_manager" {
   depends_on = [kubernetes_namespace.cert_manager]
 }
 
+resource "time_sleep" "wait" {
+  create_duration = "60s"
+
+  depends_on = [helm_release.cert_manager]
+}
+
 resource "kubectl_manifest" "cluster_issuer" {
   count      = var.cluster_issuer_create ? 1 : 0
 
@@ -31,5 +37,5 @@ resource "kubectl_manifest" "cluster_issuer" {
 
   yaml_body  = var.cluster_issuer_yaml == null ? data.template_file.cluster_issuer.rendered : var.cluster_issuer_yaml
 
-  depends_on = [kubernetes_namespace.cert_manager, helm_release.cert_manager]
+  depends_on = [kubernetes_namespace.cert_manager, helm_release.cert_manager, time_sleep.wait]
 }
