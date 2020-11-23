@@ -2,7 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: ${name}
-  namespace: cert-manager
+  namespace: ${namespace}
 spec:
   acme:
     # The ACME server URL
