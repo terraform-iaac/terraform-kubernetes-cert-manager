@@ -31,3 +31,8 @@ variable "cluster_issuer_yaml" {
     description = "Create Cluster Issuer with your yaml"
     default = null
 }
+
+variable "additional_set" {
+    description = "Additional sets to Helm"
+    default = []
+}

@@ -12,13 +12,22 @@ resource "helm_release" "cert_manager" {
   repository = "https://charts.jetstack.io"
   name       = "cert-manager"
   namespace  = kubernetes_namespace.cert_manager.id
-  version    = "1.0.3"
+  version    = "1.0.4"
 
   create_namespace = false
 
   set {
     name  = "installCRDs"
     value = "true"
+  }
+
+  dynamic "set" {
+    for_each = var.additional_set
+    content {
+      name  = set.value.name
+      value = set.value.value
+      type  = lookup(set.value, "type", null )
+    }
   }
 
   depends_on = [kubernetes_namespace.cert_manager]
