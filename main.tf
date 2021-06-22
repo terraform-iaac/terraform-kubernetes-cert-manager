@@ -1,9 +1,9 @@
 resource "kubernetes_namespace" "cert_manager" {
   metadata {
     annotations = {
-      name      = var.namespace_name
+      name = var.namespace_name
     }
-    name        = var.namespace_name
+    name = var.namespace_name
   }
 }
 
@@ -26,7 +26,7 @@ resource "helm_release" "cert_manager" {
     content {
       name  = set.value.name
       value = set.value.value
-      type  = lookup(set.value, "type", null )
+      type  = lookup(set.value, "type", null)
     }
   }
 
@@ -40,11 +40,11 @@ resource "time_sleep" "wait" {
 }
 
 resource "kubectl_manifest" "cluster_issuer" {
-  count      = var.cluster_issuer_create ? 1 : 0
+  count = var.cluster_issuer_create ? 1 : 0
 
   validate_schema = false
 
-  yaml_body  = var.cluster_issuer_yaml == null ? data.template_file.cluster_issuer.rendered : var.cluster_issuer_yaml
+  yaml_body = var.cluster_issuer_yaml == null ? data.template_file.cluster_issuer.rendered : var.cluster_issuer_yaml
 
   depends_on = [kubernetes_namespace.cert_manager, helm_release.cert_manager, time_sleep.wait]
 }
