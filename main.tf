@@ -1,9 +1,9 @@
 resource "kubernetes_namespace" "cert_manager" {
   metadata {
     annotations = {
-      name      = "cert-manager"
+      name      = var.namespace_name
     }
-    name        = "cert-manager"
+    name        = var.namespace_name
   }
 }
 
@@ -12,7 +12,7 @@ resource "helm_release" "cert_manager" {
   repository = "https://charts.jetstack.io"
   name       = "cert-manager"
   namespace  = kubernetes_namespace.cert_manager.id
-  version    = "1.0.4"
+  version    = "1.4.0"
 
   create_namespace = false
 
