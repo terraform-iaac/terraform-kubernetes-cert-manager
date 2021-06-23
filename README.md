@@ -11,7 +11,7 @@ Terraform module used to create Cert Manager in Kubernetes, with auto http valid
 #### Terraform example
 ```terraform
 module "cert_manager" {
-  source        = "terraform-iaac/terraform-cert-manager/kubernetes"
+  source        = "terraform-iaac/cert-manager/kubernetes"
   
   cluster_issuer_email                   = "admin@mysite.com"
   cluster_issuer_name                    = "cert-manager-global"
