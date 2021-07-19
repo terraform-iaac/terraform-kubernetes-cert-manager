@@ -5,13 +5,15 @@ resource "kubernetes_namespace" "cert_manager" {
     }
     name = var.namespace_name
   }
+
+  count = var.create_namespace ? 1 : 0
 }
 
 resource "helm_release" "cert_manager" {
   chart      = "cert-manager"
   repository = "https://charts.jetstack.io"
   name       = "cert-manager"
-  namespace  = kubernetes_namespace.cert_manager.id
+  namespace  = var.namespace_name
   version    = "1.4.0"
 
   create_namespace = false
