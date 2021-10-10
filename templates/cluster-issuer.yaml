@@ -6,6 +6,7 @@ spec:
   acme:
     # The ACME server URL
     server: ${server}
+    preferredChain: "ISRG Root X1"
     # Email address used for ACME registration
     email: ${email}
     # Name of a secret used to store the ACME account private key
