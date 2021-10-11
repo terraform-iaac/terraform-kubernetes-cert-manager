@@ -2,6 +2,12 @@ variable "namespace_name" {
   default = "cert-manager"
 }
 
+variable "create_namespace" {
+  type        = bool
+  description = "(Optional) Create namespace?"
+  default     = true
+}
+
 variable "cluster_issuer_server" {
   description = "The ACME server URL"
   type        = string

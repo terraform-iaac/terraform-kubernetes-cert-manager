@@ -5,13 +5,15 @@ terraform {
       version = "~> 1.11.1"
     }
     kubernetes = {
-      source = "hashicorp/kubernetes"
+      source  = "hashicorp/kubernetes"
+      version = ">= 1.13"
     }
     template = {
       source = "hashicorp/template"
     }
     helm = {
-      source = "hashicorp/helm"
+      source  = "hashicorp/helm"
+      version = ">= 2.1.0"
     }
   }
   required_version = ">= 0.14"

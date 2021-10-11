@@ -1,4 +1,6 @@
 resource "kubernetes_namespace" "cert_manager" {
+  count = var.create_namespace ? 1 : 0
+
   metadata {
     annotations = {
       name = var.namespace_name
@@ -11,7 +13,7 @@ resource "helm_release" "cert_manager" {
   chart      = "cert-manager"
   repository = "https://charts.jetstack.io"
   name       = "cert-manager"
-  namespace  = kubernetes_namespace.cert_manager.id
+  namespace  = var.create_namespace ? kubernetes_namespace.cert_manager[0].id : var.namespace_name
   version    = "1.5.4"
 
   create_namespace = false
@@ -29,8 +31,6 @@ resource "helm_release" "cert_manager" {
       type  = lookup(set.value, "type", null)
     }
   }
-
-  depends_on = [kubernetes_namespace.cert_manager]
 }
 
 resource "time_sleep" "wait" {

@@ -5,8 +5,8 @@ Terraform module used to create Cert Manager in Kubernetes, with auto http valid
 
 ## Usage
 
-#### For activate auto generating TLS, please add this annotation to ingress: 
-    `cert-manager.io/cluster-issuer = module.cert_manager.cluster_issuer_name`
+#### To activate TLS auto generation, please add this annotation to ingress: 
+    cert-manager.io/cluster-issuer = module.cert_manager.cluster_issuer_name
 
 #### Terraform example
 ```terraform
@@ -25,6 +25,7 @@ module "cert_manager" {
 | Name | Description | Type | Default |  Required |
 |------|-------------|------|---------|:--------:|
 | namespace\_name  | Name of created namespace | `string` | `cert-manager` | no |
+| create_namespace | Create namespace or use exist | `bool` | `true` | no |
 | cluster\_issuer\_server | The ACME server URL | `string` | `https://acme-v02.api.letsencrypt.org/directory` | no |
 | cluster\_issuer\_email | Email address used for ACME registration | `string` | n/a |  yes |
 | cluster\_issuer\_private\_key\_secret\_name | Name of a secret used to store the ACME account private key | `string` | `cert-manager-private-key` |  no |
@@ -50,7 +51,7 @@ module "cert_manager" {
 | helm | >= 2.1.0 |
 | gavinbunney/kubectl | ~> 1.11.1 |
 
-Cert Manager Version: v1.4.0
+Cert Manager Version: v1.5.4
 
 Source: https://github.com/jetstack/cert-manager
 

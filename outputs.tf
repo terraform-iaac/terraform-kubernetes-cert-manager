@@ -1,5 +1,5 @@
 output "namespace" {
-  value = kubernetes_namespace.cert_manager.id
+  value = var.create_namespace ? kubernetes_namespace.cert_manager[0].id : var.namespace_name
 }
 output "cluster_issuer_name" {
   value = var.cluster_issuer_name
