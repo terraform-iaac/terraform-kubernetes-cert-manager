@@ -5,6 +5,21 @@ Terraform module used to create Cert Manager in Kubernetes, with auto http valid
 
 ## Usage
 
+### You should to add into your terraform, `kubectl` provider configuration:
+```terraform
+provider "kubectl" {
+  # Same config as on kubernetes provider
+}
+terraform {
+  required_providers {
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = "1.13.0"
+    }
+  }
+}
+```
+
 #### To activate TLS auto generation, please add this annotation to ingress: 
     cert-manager.io/cluster-issuer = module.cert_manager.cluster_issuer_name
 
