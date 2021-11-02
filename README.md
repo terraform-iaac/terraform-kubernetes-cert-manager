@@ -5,16 +5,25 @@ Terraform module used to create Cert Manager in Kubernetes, with auto http valid
 
 ## Usage
 
-### You should to add into your terraform, `kubectl` provider configuration:
+### You should to add into your terraform, `kubectl` & `helm`  provider configuration:
 ```terraform
 provider "kubectl" {
-  # Same config as on kubernetes provider
+  # Same config as in kubernetes provider
+}
+provider "helm" {
+  kubernetes {
+    # Same config as in kubernetes provider
+  }
 }
 terraform {
   required_providers {
     kubectl = {
       source  = "gavinbunney/kubectl"
       version = "1.13.0"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "2.3.0"
     }
   }
 }
