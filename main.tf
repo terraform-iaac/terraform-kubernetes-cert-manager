@@ -39,12 +39,37 @@ resource "time_sleep" "wait" {
   depends_on = [helm_release.cert_manager]
 }
 
-resource "kubectl_manifest" "cluster_issuer" {
+resource "kubernetes_manifest" "cluster_issuer" {
   count = var.cluster_issuer_create ? 1 : 0
 
-  validate_schema = false
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "ClusterIssuer"
 
-  yaml_body = var.cluster_issuer_yaml == null ? data.template_file.cluster_issuer.rendered : var.cluster_issuer_yaml
+    metadata = {
+      name = var.cluster_issuer_name
+    }
+
+    spec = {
+      acme = {
+        server         = var.cluster_issuer_server
+        preferredChain = "ISRG Root X1"
+        email          = var.cluster_issuer_email
+        privateKeySecretRef = {
+          name = var.cluster_issuer_private_key_secret_name
+        }
+        "solvers" = [
+          {
+            "http01" = {
+              "ingress" = {
+                "class" = "nginx"
+              }
+            }
+          },
+        ]
+      }
+    }
+  }
 
   depends_on = [kubernetes_namespace.cert_manager, helm_release.cert_manager, time_sleep.wait]
 }
