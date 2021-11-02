@@ -25,6 +25,7 @@ module "cert_manager" {
 | Name | Description | Type | Default |  Required |
 |------|-------------|------|---------|:--------:|
 | namespace\_name  | Name of created namespace | `string` | `cert-manager` | no |
+| chart\_version  | HELM Chart Version for cert-manager ( It is not recommended to change )| `string` | `cert-manager` | no |
 | create_namespace | Create namespace or use exist | `bool` | `true` | no |
 | cluster\_issuer\_server | The ACME server URL | `string` | `https://acme-v02.api.letsencrypt.org/directory` | no |
 | cluster\_issuer\_email | Email address used for ACME registration | `string` | n/a |  yes |
@@ -51,7 +52,7 @@ module "cert_manager" {
 | helm | >= 2.1.0 |
 | gavinbunney/kubectl | ~> 1.11.1 |
 
-Cert Manager Version: v1.5.4
+Cert Manager Version: v1.6.1
 
 Source: https://github.com/jetstack/cert-manager
 

@@ -8,6 +8,12 @@ variable "create_namespace" {
   default     = true
 }
 
+variable "chart_version" {
+  type        = string
+  description = "HELM Chart Version for cert-manager"
+  default     = "1.6.1"
+}
+
 variable "cluster_issuer_server" {
   description = "The ACME server URL"
   type        = string
