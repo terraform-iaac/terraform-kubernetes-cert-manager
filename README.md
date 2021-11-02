@@ -74,7 +74,7 @@ module "cert_manager" {
 | terraform | >= 0.13.0 |
 | kubernetes | >= 1.13 |
 | helm | >= 2.1.0 |
-| gavinbunney/kubectl | ~> 1.11.1 |
+| gavinbunney/kubectl | >= 1.13.0 |
 
 Cert Manager Version: v1.6.1
 
