@@ -55,7 +55,7 @@ variable "additional_set" {
 }
 
 variable "solvers" {
-  description = "List of Cert manager solvers"
+  description = "List of Cert manager solvers. For a complex example please look at the Readme"
   type        = any
   default = [{
     http01 = {
@@ -64,45 +64,4 @@ variable "solvers" {
       }
     }
   }]
-  #
-  # Example from https://github.com/terraform-iaac/terraform-kubernetes-cert-manager/issues/5
-  #
-  # [
-  #   {
-  #     dns01 = {
-  #       route53 = {
-  #         region  = "us-east-1"
-  #         ambient = "true"
-  #       }
-  #     },
-  #     selector = {
-  #       dnsZones = [
-  #         "internal.example.com"
-  #       ]
-  #     }
-  #   },
-  #   {
-  #     dns01 = {
-  #       cloudflare = {
-  #         email = "user@example.com"
-  #         apiKeySecretRef = {
-  #           name = "cloudflare-api-key-secret"
-  #           key  = "API"
-  #         }
-  #       },
-  #     },
-  #     selector = {
-  #       dnsZones = [
-  #         "public.example.com"
-  #       ]
-  #     }
-  #   },
-  #   {
-  #     http01 = {
-  #       ingress = {
-  #         class = "nginx"
-  #       }
-  #     }
-  #   }
-  # ]
 }
