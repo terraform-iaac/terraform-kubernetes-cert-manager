@@ -29,14 +29,14 @@ terraform {
 }
 ```
 
-#### To activate TLS auto generation, please add this annotation to ingress: 
+#### To activate TLS auto generation, please add this annotation to ingress:
     cert-manager.io/cluster-issuer = module.cert_manager.cluster_issuer_name
 
 #### Terraform example
 ```terraform
 module "cert_manager" {
   source        = "terraform-iaac/cert-manager/kubernetes"
-  
+
   cluster_issuer_email                   = "admin@mysite.com"
   cluster_issuer_name                    = "cert-manager-global"
   cluster_issuer_private_key_secret_name = "cert-manager-private-key"
@@ -58,6 +58,7 @@ module "cert_manager" {
 | cluster\_issuer\_create | Create Cluster Issuer? Note: you should create your own issuer if value `false` | `bool` | `true` |  no |
 | cluster\_issuer\_yaml | Create Cluster Issuer with your yaml. NOTE: some variables stop to work in case when you using this parameter | `string` | `null` |  no |
 | additional\_set | Additional sets to Helm | <pre>list(object({<br>    name  = string<br>    value = string<br>    type  = string // Optional<br>  }))</pre> | `[]` |  no |
+| solvers | Alternate way of providing just the solvers section of the cluster issuer | `list[object(any)]` | <pre>- http01:<br>    ingress:<br>      class: nginx</pre>|  no |
 
 ## Outputs
 | Name | Description |

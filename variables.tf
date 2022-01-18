@@ -53,3 +53,67 @@ variable "additional_set" {
   description = "Additional sets to Helm"
   default     = []
 }
+
+variable "solvers" {
+  description = "List of Cert manager solvers"
+  #type        = list(map(any))
+  type        = any
+  default = [{
+    http01 = {
+      ingress = {
+        class = "nginx"
+      }
+    }
+  }]
+  #
+  # Example from https://github.com/terraform-iaac/terraform-kubernetes-cert-manager/issues/5
+  #
+  # [
+  #   {
+  #     dns01 = {
+  #       route53 = {
+  #         region  = "us-east-1"
+  #         ambient = "true"
+  #       }
+  #     },
+  #     selector = {
+  #       dnsZones = [
+  #         "internal.example.com"
+  #       ]
+  #     }
+  #   },
+  #   {
+  #     dns01 = {
+  #       cloudflare = {
+  #         email = "user@example.com"
+  #         apiKeySecretRef = {
+  #           name = "cloudflare-api-key-secret"
+  #           key  = "API"
+  #         }
+  #       },
+  #     },
+  #     selector = {
+  #       dnsZones = [
+  #         "public.example.com"
+  #       ]
+  #     }
+  #   },
+  #   {
+  #     http01 = {
+  #       ingress = {
+  #         class = "nginx"
+  #       }
+  #     }
+  #   }
+  # ]
+  #
+  # FixMe  Define multiple object types where all are valid
+  # type        = list[
+  #   object({
+  #      http01 = map(any)
+  #    }),
+  #    object({
+  #      dns01 = map(any)
+  #    }),
+  # etc
+}

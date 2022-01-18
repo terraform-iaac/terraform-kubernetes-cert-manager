@@ -44,7 +44,7 @@ resource "kubectl_manifest" "cluster_issuer" {
 
   validate_schema = false
 
-  yaml_body = var.cluster_issuer_yaml == null ? data.template_file.cluster_issuer.rendered : var.cluster_issuer_yaml
+  yaml_body = var.cluster_issuer_yaml == null ? yamlencode(local.cluster_issuer) : var.cluster_issuer_yaml
 
   depends_on = [kubernetes_namespace.cert_manager, helm_release.cert_manager, time_sleep.wait]
 }
