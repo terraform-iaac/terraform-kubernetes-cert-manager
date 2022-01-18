@@ -53,3 +53,15 @@ variable "additional_set" {
   description = "Additional sets to Helm"
   default     = []
 }
+
+variable "solvers" {
+  description = "List of Cert manager solvers. For a complex example please look at the Readme"
+  type        = any
+  default = [{
+    http01 = {
+      ingress = {
+        class = "nginx"
+      }
+    }
+  }]
+}
