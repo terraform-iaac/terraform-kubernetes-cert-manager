@@ -56,7 +56,6 @@ variable "additional_set" {
 
 variable "solvers" {
   description = "List of Cert manager solvers"
-  #type        = list(map(any))
   type        = any
   default = [{
     http01 = {
@@ -106,14 +105,4 @@ variable "solvers" {
   #     }
   #   }
   # ]
-  #
-  # FixMe  Define multiple object types where all are valid
-  # type        = list[
-  #   object({
-  #      http01 = map(any)
-  #    }),
-  #    object({
-  #      dns01 = map(any)
-  #    }),
-  # etc
 }
