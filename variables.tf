@@ -65,3 +65,9 @@ variable "solvers" {
     }
   }]
 }
+
+variable "certificates" {
+  description = "List of Certificates"
+  type        = any
+  default     = {}
+}
