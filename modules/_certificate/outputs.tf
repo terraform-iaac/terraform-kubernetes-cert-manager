@@ -3,7 +3,8 @@ output "map" {
     apiVersion = "cert-manager.io/v1"
     kind       = "Certificate"
     metadata = {
-      name = var.name
+      name      = var.name
+      namespace = var.namespace
     }
     spec = {
       secretName = var.secret_name
