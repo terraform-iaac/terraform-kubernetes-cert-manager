@@ -54,7 +54,7 @@ module "certificates" {
   source   = "./modules/_certificate"
 
   name                  = each.key
-  namespace             = try(each.value.namespace, "cert-manager")
+  namespace             = try(each.value.namespace, var.namespace_name)
   secret_name           = try(each.value.secret_name, "${each.key}-tls")
   secret_annotations    = try(each.value.secret_annotations, {})
   secret_labels         = try(each.value.secret_labels, {})
