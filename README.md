@@ -126,19 +126,19 @@ module "cert_manager" {
 | secret_annotations | certificate secret annotations | map(string) | {} | no |
 | secret_labels | certificate secret labels | map(string) | {} | no |
 | duration | certificate validity period | map(string) | "2160h" | no |
-| renew_before | It will reissue the certificate before this date from the due date | "360h" | no |
-| organizations | Organization of issuing certificate | [] | no |
-| is_ca | Whether the certificate is a CA or not | [] | no |
-| private_key_algorithm | It will generate a private key with this algorithm | "RSA" | no |
-| private_key_encoding | It will generate a private key with this encoding | "PKCS1" | no |
-| private_key_size | It will generate a private key of this lengh | 2048 | no |
-| usages | certificate usages | ["server auth", "client auth"] | no |
-| dns_names | Domain names for which the certificate is intended | n/a | yes |
-| uris | certificate URIs | [] | no |
-| ip_addresses | certificate ip address | [] | no |
-| issuer_name | issuer name.  | Default is the name of the ClusterIssuer created by this module | no |
-| issuer_kind | issuer kind | "ClusterIssuer" | no |
-| issuer_group | issuer group | "" | no |
+| renew_before | It will reissue the certificate before this date from the due date | string | "360h" | no |
+| organizations | Organization of issuing certificate | list(string) | [] | no |
+| is_ca | Whether the certificate is a CA or not | bool | false | no |
+| private_key_algorithm | It will generate a private key with this algorithm | string | "RSA" | no |
+| private_key_encoding | It will generate a private key with this encoding | string | "PKCS1" | no |
+| private_key_size | It will generate a private key of this lengh | number | 2048 | no |
+| usages | certificate usages | ["server auth", "client auth"] | list(string) | no |
+| dns_names | Domain names for which the certificate is intended | list(string) | n/a | yes |
+| uris | certificate URIs | list(string) | [] | no |
+| ip_addresses | certificate ip address | list(string) | [] | no |
+| issuer_name | issuer name.  | string | Default is the name of the ClusterIssuer created by this module | no |
+| issuer_kind | issuer kind | string | "ClusterIssuer" | no |
+| issuer_group | issuer group | string | "" | no |
 
 
 ## Outputs
