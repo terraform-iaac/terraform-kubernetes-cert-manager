@@ -132,7 +132,7 @@ module "cert_manager" {
 | private_key_algorithm | It will generate a private key with this algorithm | string | "RSA" | no |
 | private_key_encoding | It will generate a private key with this encoding | string | "PKCS1" | no |
 | private_key_size | It will generate a private key of this lengh | number | 2048 | no |
-| usages | certificate usages | ["server auth", "client auth"] | list(string) | no |
+| usages | certificate usages | list(string) | ["server auth", "client auth"] | no |
 | dns_names | Domain names for which the certificate is intended | list(string) | n/a | yes |
 | uris | certificate URIs | list(string) | [] | no |
 | ip_addresses | certificate ip address | list(string) | [] | no |
