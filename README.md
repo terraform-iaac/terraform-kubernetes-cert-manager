@@ -122,7 +122,7 @@ module "cert_manager" {
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|----------|
 | namespace | certificate resource namespace | string | uses var.namespace_name of this module | no |
-| secret_name | certificate secret name | string | ${Certificate Name}-tls | no |
+| secret_name | certificate secret name. Note: for AKS/AGIC ensure cert and secret have the same name | string | ${Certificate Name}-tls | no |
 | secret_annotations | certificate secret annotations | map(string) | {} | no |
 | secret_labels | certificate secret labels | map(string) | {} | no |
 | duration | certificate validity period | map(string) | "2160h" | no |
