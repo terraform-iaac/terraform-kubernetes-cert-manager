@@ -160,7 +160,7 @@ module "cert_manager" {
 | helm | >= 2.1.0 |
 | gavinbunney/kubectl | >= 1.13.0 |
 
-Cert Manager Version: v1.6.1
+Cert Manager Version: v1.7.1
 
 Source: https://github.com/jetstack/cert-manager
 
