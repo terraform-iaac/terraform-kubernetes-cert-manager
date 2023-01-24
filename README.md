@@ -15,6 +15,9 @@ provider "helm" {
     # Same config as in kubernetes provider
   }
 }
+provider "kubernetes" {
+  # configuration
+}
 terraform {
   required_providers {
     kubectl = {
@@ -23,7 +26,11 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "2.3.0"
+      version = "2.5.0"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "2.0.1"
     }
   }
 }
@@ -153,14 +160,14 @@ module "cert_manager" {
 
 ## Terraform Requirements
 
-| Name | Version |
-|------|---------|
-| terraform | >= 0.13.0 |
-| kubernetes | >= 1.13 |
-| helm | >= 2.1.0 |
+| Name | Version   |
+|------|-----------|
+| terraform | >= 1.0.0  |
+| kubernetes | >= 2.0.1  |
+| helm | >= 2.5.0  |
 | gavinbunney/kubectl | >= 1.13.0 |
 
-Cert Manager Version: v1.7.1
+Cert Manager Version: v1.11.0
 
 Source: https://github.com/jetstack/cert-manager
 

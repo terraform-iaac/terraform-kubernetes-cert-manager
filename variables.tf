@@ -11,7 +11,7 @@ variable "create_namespace" {
 variable "chart_version" {
   type        = string
   description = "HELM Chart Version for cert-manager"
-  default     = "1.7.1"
+  default     = "1.11.0"
 }
 
 variable "cluster_issuer_server" {
