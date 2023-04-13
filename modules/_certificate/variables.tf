@@ -9,6 +9,12 @@ variable "namespace" {
   default     = "cert-manager"
 }
 
+variable "annotations" {
+  type        = map(string)
+  description = "certificate resource annotations"
+  default     = {}
+}
+
 variable "secret_name" {
   type        = string
   description = "certificate secret name"
