@@ -1,8 +1,8 @@
 terraform {
   required_providers {
     kubectl = {
-      source  = "gavinbunney/kubectl"
-      version = ">= 1.13.0"
+      source  = "alekc/kubectl"
+      version = ">= 2.0.2"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"

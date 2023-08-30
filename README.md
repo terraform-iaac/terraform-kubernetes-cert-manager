@@ -21,8 +21,8 @@ provider "kubernetes" {
 terraform {
   required_providers {
     kubectl = {
-      source  = "gavinbunney/kubectl"
-      version = "1.13.0"
+      source  = "alekc/kubectl"
+      version = ">= 2.0.2"
     }
     helm = {
       source  = "hashicorp/helm"
@@ -165,7 +165,7 @@ module "cert_manager" {
 | terraform | >= 1.0.0  |
 | kubernetes | >= 2.0.1  |
 | helm | >= 2.5.0  |
-| gavinbunney/kubectl | >= 1.13.0 |
+| alekc/kubectl | >= 2.0.2 |
 
 Cert Manager Version: v1.11.0
 
