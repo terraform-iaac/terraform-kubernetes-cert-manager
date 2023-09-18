@@ -56,7 +56,7 @@ module "cert_manager" {
 | Name | Description | Type | Default |  Required |
 |------|-------------|------|---------|:--------:|
 | namespace\_name  | Name of created namespace | `string` | `cert-manager` | no |
-| chart\_version  | HELM Chart Version for cert-manager ( It is not recommended to change )| `string` | `cert-manager` | no |
+| chart\_version  | HELM Chart Version for cert-manager ( It is not recommended to change )| `string` | `1.11.0` | no |
 | create_namespace | Create namespace or use exist | `bool` | `true` | no |
 | cluster\_issuer\_server | The ACME server URL | `string` | `https://acme-v02.api.letsencrypt.org/directory` | no |
 | cluster\_issuer\_email | Email address used for ACME registration | `string` | n/a |  yes |
