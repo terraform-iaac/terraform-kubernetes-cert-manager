@@ -50,13 +50,14 @@ variable "cluster_issuer_yaml" {
 }
 
 variable "additional_set" {
+  type        = list(any)
   description = "Additional sets to Helm"
   default     = []
 }
 
 variable "solvers" {
   description = "List of Cert manager solvers. For a complex example please look at the Readme"
-  type        = any
+  type        = list(any)
   default = [{
     http01 = {
       ingress = {
