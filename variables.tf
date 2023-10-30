@@ -57,7 +57,7 @@ variable "additional_set" {
 
 variable "solvers" {
   description = "List of Cert manager solvers. For a complex example please look at the Readme"
-  type        = list(any)
+  type        = any
   default = [{
     http01 = {
       ingress = {
