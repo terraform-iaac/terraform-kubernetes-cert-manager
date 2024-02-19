@@ -20,6 +20,12 @@ variable "cluster_issuer_server" {
   default     = "https://acme-v02.api.letsencrypt.org/directory"
 }
 
+variable "cluster_issuer_preferred_chain" {
+  description = "Preferred chain for ClusterIssuer"
+  default     = "ISRG Root X1"
+  type        = string
+}
+
 variable "cluster_issuer_email" {
   description = "Email address used for ACME registration"
   type        = string

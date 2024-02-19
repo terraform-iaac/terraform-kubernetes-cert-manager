@@ -9,7 +9,7 @@ locals {
       acme = {
         # The ACME server URL
         server         = var.cluster_issuer_server
-        preferredChain = "ISRG Root X1"
+        preferredChain = var.cluster_issuer_preferred_chain
         # Email address used for ACME registration
         email = var.cluster_issuer_email
         # Name of a secret used to store the ACME account private key
