@@ -6,6 +6,7 @@ output "map" {
       name        = var.name
       namespace   = var.namespace
       annotations = var.annotations
+      labels      = var.labels
     }
     spec = {
       secretName = var.secret_name

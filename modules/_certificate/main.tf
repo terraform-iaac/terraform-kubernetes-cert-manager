@@ -2,6 +2,7 @@ locals {
   name               = var.name
   namespace          = var.namespace
   annotations        = var.annotations
+  labels             = var.labels
   secret_name        = var.secret_name
   secret_annotations = var.secret_annotations
   secret_labels      = var.secret_labels
