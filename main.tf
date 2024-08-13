@@ -56,6 +56,7 @@ module "certificates" {
   name                  = each.key
   namespace             = try(each.value.namespace, var.namespace_name)
   annotations           = try(each.value.annotations, {})
+  labels                = try(each.value.labels, {})
   secret_name           = try(each.value.secret_name, "${each.key}-tls")
   secret_annotations    = try(each.value.secret_annotations, {})
   secret_labels         = try(each.value.secret_labels, {})

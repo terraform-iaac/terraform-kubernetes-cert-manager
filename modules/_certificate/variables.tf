@@ -15,6 +15,12 @@ variable "annotations" {
   default     = {}
 }
 
+variable "labels" {
+  type        = map(string)
+  description = "certificate labels"
+  default     = {}
+}
+
 variable "secret_name" {
   type        = string
   description = "certificate secret name"
