@@ -18,19 +18,7 @@ resource "helm_release" "cert_manager" {
 
   create_namespace = false
 
-  set {
-    name  = "installCRDs"
-    value = "true"
-  }
-
-  dynamic "set" {
-    for_each = var.additional_set
-    content {
-      name  = set.value.name
-      value = set.value.value
-      type  = lookup(set.value, "type", null)
-    }
-  }
+  set = local.all_set
 }
 
 resource "time_sleep" "wait" {

@@ -1,4 +1,15 @@
 locals {
+  all_set = [
+    for k, v in merge(
+      {
+        "crds.enabled" = "true"
+      },
+      length(var.additional_set) > 0 ? merge([for m in var.additional_set : m]...) : {}
+      ) : {
+      name  = k
+      value = v
+    }
+  ]
   cluster_issuer = {
     apiVersion = "cert-manager.io/v1"
     kind       = "ClusterIssuer"
