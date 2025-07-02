@@ -4,7 +4,7 @@ variable "namespace_name" {
 
 variable "create_namespace" {
   type        = bool
-  description = "(Optional) Create namespace?"
+  description = "(Optional) Whether to create the namespace or use an existing one"
   default     = true
 }
 
@@ -77,4 +77,16 @@ variable "certificates" {
   description = "List of Certificates"
   type        = any
   default     = {}
+}
+
+variable "crds" {
+  description = "This option decides if the CRDs should be installed as part of the Helm installation"
+  type        = bool
+  default     = true
+}
+
+variable "crds_keep" {
+  description = "This will prevent Helm from uninstalling the CRD when the Helm release is uninstalled. WARNING: when the CRDs are removed, all cert-manager custom resources (Certificates, Issuers, ...) will be removed too by the garbage collector"
+  type        = bool
+  default     = true
 }

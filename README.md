@@ -1,17 +1,19 @@
 Terraform module for Kubernetes Cert Manager
 ==========================================
 
-Terraform module used to create Cert Manager in Kubernetes, with auto http validation issuer. With simple syntax.
+Terraform module for deploying Cert Manager in Kubernetes with automatic certificate validation via HTTP ClusterIssuer.  
+Provides a simple and flexible interface.
 
 ## Usage
 
-### You should to add into your terraform, `kubectl` & `helm`  provider configuration:
+### Required Providers & Configuration
+Make sure to configure the following providers in your root Terraform module:
 ```terraform
 provider "kubectl" {
   # Same config as in kubernetes provider
 }
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     # Same config as in kubernetes provider
   }
 }
@@ -22,56 +24,58 @@ terraform {
   required_providers {
     kubectl = {
       source  = "alekc/kubectl"
-      version = ">= 2.0.2"
-    }
-    helm = {
-      source  = "hashicorp/helm"
-      version = "2.5.0"
-    }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "2.0.1"
     }
   }
 }
 ```
 
-#### To activate TLS auto generation, please add this annotation to ingress:
-    cert-manager.io/cluster-issuer = module.cert_manager.cluster_issuer_name
+#### Minimal Example
 
-#### Terraform example
+This is the minimal configuration required to deploy cert-manager and create a working ClusterIssuer for HTTP validation.
+
 ```terraform
 module "cert_manager" {
-  source        = "terraform-iaac/cert-manager/kubernetes"
-
-  cluster_issuer_email                   = "admin@mysite.com"
-  cluster_issuer_name                    = "cert-manager-global"
-  cluster_issuer_private_key_secret_name = "cert-manager-private-key"
+  source               = "terraform-iaac/cert-manager/kubernetes"
+  cluster_issuer_email = "admin@mysite.com"
 }
-
 ```
 
-## Inputs
+### Enable Automatic TLS on Ingress
 
-| Name                                        | Description                                                                                                   | Type                                                                                                            | Default -                                                  | Required  |
-|---------------------------------------------|---------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|------------------------------------------------------------|:---------:|
-| namespace\_name                             | Name of created namespace                                                                                     | `string`                                                                                                        | `cert-manager`                                             |    no     |
-| chart\_version                              | HELM Chart Version for cert-manager ( It is not recommended to change )                                       | `string`                                                                                                        | `1.11.0`                                                   |    no     |
-| create_namespace                            | Create namespace or use exist                                                                                 | `bool`                                                                                                          | `true`                                                     |    no     |
-| cluster\_issuer\_server                     | The ACME server URL                                                                                           | `string`                                                                                                        | `https://acme-v02.api.letsencrypt.org/directory`           |    no     |
-| cluster\_issuer\_preferred\_chain           | Preferred chain for ClusterIssuer                                                                             | `string`                                                                                                        | `ISRG Root X1`                                             |    no     |
-| cluster\_issuer\_email                      | Email address used for ACME registration                                                                      | `string`                                                                                                        | n/a                                                        |    yes    |
-| cluster\_issuer\_private\_key\_secret\_name | Name of a secret used to store the ACME account private key                                                   | `string`                                                                                                        | `cert-manager-private-key`                                 |    no     |
-| cluster\_issuer\_name                       | Cluster Issuer Name, used for annotations                                                                     | `string`                                                                                                        | `cert-manager`                                             |    no     |
-| cluster\_issuer\_create                     | Create Cluster Issuer? Note: you should create your own issuer if value `false`                               | `bool`                                                                                                          | `true`                                                     |    no     |
-| cluster\_issuer\_yaml                       | Create Cluster Issuer with your yaml. NOTE: some variables stop to work in case when you using this parameter | `string`                                                                                                        | `null`                                                     |    no     |
-| additional\_set                             | Additional sets to Helm                                                                                       | <pre>list(object({<br>    name  = string<br>    value = string<br>    type  = string // Optional<br>  }))</pre> | `[]`                                                       |    no     |
-| solvers                                     | Alternate way of providing just the solvers section of the cluster issuer                                     | `list[object(any)]`                                                                                             | <pre>- http01:<br>    ingress:<br>      class: nginx</pre> |    no     |
-| certificates                                | List of certificates                                                                                          | `any`                                                                                                           | refer to ["Certificates"](#certificates)                   |    no     |
+To enable automatic TLS certificate generation for your Ingress resources, add the following annotation to use default TLS issuer:
+
+```yaml
+cert-manager.io/cluster-issuer = module.cert_manager.cluster_issuer_name
+```
+
+By default, the module uses a built-in HTTP solver with the ingress class set to `"nginx"`:
+```hcl
+solvers = [{
+  http01 = {
+    ingress = {
+      class = "nginx"
+    }
+  }
+}]
+```
+
+This means your default Ingress controller must be named "nginx".
+If your cluster uses a different ingress class (e.g. "alb", "traefik", etc),
+you should override the solvers variable to match your setup.
+
+```hcl
+solvers = [{
+  http01 = {
+    ingress = {
+      class = "your-ingress-class"
+    }
+  }
+}]
+```
 
 ### Solvers
 An example of a complex solver that uses different methods `http01` and `DNS01` as well as selectors for different domains would be
-```
+```hcl
 solvers = [
   {
     dns01 = {
@@ -112,9 +116,33 @@ solvers = [
 ]
 ```
 
+## Inputs
+
+### General Settings
+| Name                     | Description                                                                           | Type                                                                                                            | Default -                                | Required |
+|--------------------------|---------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|------------------------------------------|:--------:|
+| namespace\_name          | Name of created namespace                                                             | `string`                                                                                                        | `cert-manager`                           |    no    |
+| create\_namespace        | Whether to create the namespace or use an existing one                                | `bool`                                                                                                          | `true`                                   |    no    |
+| chart\_version           | HELM Chart Version for cert-manager ( It is not recommended to change )               | `string`                                                                                                        | `1.11.0`                                 |    no    |
+| crds                     | This option decides if the CRDs should be installed as part of the Helm installation  | bool                                                                                                            | true                                     |    no    |
+| crds_keep                | This will prevent Helm from uninstalling the CRD when the Helm release is uninstalled | bool                                                                                                            | true                                     |    no    |
+| additional\_set          | Additional sets to Helm                                                               | <pre>list(object({<br>    name  = string<br>    value = string<br>    type  = string // Optional<br>  }))</pre> | `[]`                                     |    no    |
+| certificates             | List of certificates                                                                  | `any`                                                                                                           | refer to ["Certificates"](#certificates) |    no    |
+
+### ClusterIssuer Configuration
+| Name                                        | Description                                                                                                     | Type                | Default -                                                  | Required |
+|---------------------------------------------|-----------------------------------------------------------------------------------------------------------------|---------------------|------------------------------------------------------------|:--------:|
+| cluster\_issuer\_email                      | Email address used for ACME registration                                                                        | `string`            | n/a                                                        |    yes    |
+| cluster\_issuer\_server                     | The ACME server URL                                                                                             | `string`            | `https://acme-v02.api.letsencrypt.org/directory`           |    no     |
+| cluster\_issuer\_preferred\_chain           | Preferred chain for ClusterIssuer                                                                               | `string`            | `ISRG Root X1`                                             |    no     |
+| cluster\_issuer\_private\_key\_secret\_name | Name of a secret used to store the ACME account private key                                                     | `string`            | `cert-manager-private-key`                                 |    no     |
+| cluster\_issuer\_name                       | Cluster Issuer Name, used for annotations                                                                       | `string`            | `cert-manager`                                             |    no     |
+| cluster\_issuer\_create                     | Create Cluster Issuer? Note: you should create your own issuer if value `false`                                 | `bool`              | `true`                                                     |    no     |
+| cluster\_issuer\_yaml                       | Create Cluster Issuer with your yaml. NOTE: some variables stop to work in case when you using this parameter   | `string`            | `null`                                                     |    no     |
+| solvers                                     | Alternate way of providing just the solvers section of the cluster issuer                                       | `list[object(any)]` | <pre>- http01:<br>    ingress:<br>      class: nginx</pre> |    no     |
+
 
 ### Certificates
-
 ```hcl
 module "cert_manager" {
   ...
@@ -126,9 +154,9 @@ module "cert_manager" {
 }
 ```
 
-
 | Name                  | Description                                                                           | Type         | Default                                                         |  Required  |
 |-----------------------|---------------------------------------------------------------------------------------|--------------|-----------------------------------------------------------------|:----------:|
+| dns_names             | Domain names for which the certificate is intended                                    | list(string) | n/a                                                             |    yes     |
 | namespace             | certificate resource namespace                                                        | string       | uses var.namespace_name of this module                          |     no     |
 | labels                | certificate resource labels                                                           | map(string)  | {}                                                              |     no     |
 | secret_name           | certificate secret name. Note: for AKS/AGIC ensure cert and secret have the same name | string       | ${Certificate Name}-tls                                         |     no     |
@@ -140,15 +168,13 @@ module "cert_manager" {
 | is_ca                 | Whether the certificate is a CA or not                                                | bool         | false                                                           |     no     |
 | private_key_algorithm | It will generate a private key with this algorithm                                    | string       | "RSA"                                                           |     no     |
 | private_key_encoding  | It will generate a private key with this encoding                                     | string       | "PKCS1"                                                         |     no     |
-| private_key_size      | It will generate a private key of this lengh                                          | number       | 2048                                                            |     no     |
+| private_key_size      | Length of the generated private key                                                   | number       | 2048                                                            |     no     |
 | usages                | certificate usages                                                                    | list(string) | ["server auth", "client auth"]                                  |     no     |
-| dns_names             | Domain names for which the certificate is intended                                    | list(string) | n/a                                                             |    yes     |
 | uris                  | certificate URIs                                                                      | list(string) | []                                                              |     no     |
 | ip_addresses          | certificate ip address                                                                | list(string) | []                                                              |     no     |
 | issuer_name           | issuer name.                                                                          | string       | Default is the name of the ClusterIssuer created by this module |     no     |
 | issuer_kind           | issuer kind                                                                           | string       | "ClusterIssuer"                                                 |     no     |
 | issuer_group          | issuer group                                                                          | string       | ""                                                              |     no     |
-
 
 ## Outputs
 | Name                                | Description                                            |
@@ -162,15 +188,16 @@ module "cert_manager" {
 
 ## Terraform Requirements
 
-| Name          |   Version   |
-|---------------|:-----------:|
-| terraform     |  >= 1.0.0   |
-| kubernetes    |  >= 2.0.1   |
-| helm          |  >= 2.5.0   |
-| alekc/kubectl |  >= 2.0.2   |
+| Name          | Version  |
+|---------------|:--------:|
+| terraform     | >= 1.0.0 |
+| kubernetes    |   ~> 2   |
+| helm          |   ~> 2   |
+| alekc/kubectl |   ~> 2   |
 
-Cert Manager Version: v1.11.0
+Cert Manager HELM Chart version: v1.17.2: https://artifacthub.io/packages/helm/cert-manager/cert-manager
 
 Source: https://github.com/jetstack/cert-manager
+
 
 Tutorials: https://cert-manager.io/docs/
