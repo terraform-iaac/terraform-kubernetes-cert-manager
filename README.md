@@ -123,7 +123,7 @@ solvers = [
 |--------------------------|---------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|------------------------------------------|:--------:|
 | namespace\_name          | Name of created namespace                                                             | `string`                                                                                                        | `cert-manager`                           |    no    |
 | create\_namespace        | Whether to create the namespace or use an existing one                                | `bool`                                                                                                          | `true`                                   |    no    |
-| chart\_version           | HELM Chart Version for cert-manager ( It is not recommended to change )               | `string`                                                                                                        | `1.11.0`                                 |    no    |
+| chart\_version           | HELM Chart Version for cert-manager ( It is not recommended to change )               | `string`                                                                                                        | `1.17.2`                                 |    no    |
 | crds                     | This option decides if the CRDs should be installed as part of the Helm installation  | bool                                                                                                            | true                                     |    no    |
 | crds_keep                | This will prevent Helm from uninstalling the CRD when the Helm release is uninstalled | bool                                                                                                            | true                                     |    no    |
 | additional\_set          | Additional sets to Helm                                                               | <pre>list(object({<br>    name  = string<br>    value = string<br>    type  = string // Optional<br>  }))</pre> | `[]`                                     |    no    |
@@ -192,7 +192,7 @@ module "cert_manager" {
 |---------------|:--------:|
 | terraform     | >= 1.0.0 |
 | kubernetes    |   ~> 2   |
-| helm          |   ~> 2   |
+| helm          |   ~> 3   |
 | alekc/kubectl |   ~> 2   |
 
 Cert Manager HELM Chart version: v1.17.2: https://artifacthub.io/packages/helm/cert-manager/cert-manager
