@@ -67,7 +67,7 @@ you should override the solvers variable to match your setup.
 solvers = [{
   http01 = {
     ingress = {
-      class = "your-ingress-class"
+      ingressClassName = "your-ingress-class"
     }
   }
 }]
@@ -109,7 +109,7 @@ solvers = [
   {
     http01 = {
       ingress = {
-        class = "nginx"
+        ingressClassName = "nginx"
       }
     }
   }
@@ -139,7 +139,7 @@ solvers = [
 | cluster\_issuer\_name                       | Cluster Issuer Name, used for annotations                                                                       | `string`            | `cert-manager`                                             |    no     |
 | cluster\_issuer\_create                     | Create Cluster Issuer? Note: you should create your own issuer if value `false`                                 | `bool`              | `true`                                                     |    no     |
 | cluster\_issuer\_yaml                       | Create Cluster Issuer with your yaml. NOTE: some variables stop to work in case when you using this parameter   | `string`            | `null`                                                     |    no     |
-| solvers                                     | Alternate way of providing just the solvers section of the cluster issuer                                       | `list[object(any)]` | <pre>- http01:<br>    ingress:<br>      class: nginx</pre> |    no     |
+| solvers                                     | Alternate way of providing just the solvers section of the cluster issuer                                       | `list[object(any)]` | <pre>- http01:<br>    ingress:<br>      ingressClassName: nginx</pre> |    no     |
 
 
 ### Certificates
