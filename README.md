@@ -53,7 +53,7 @@ By default, the module uses a built-in HTTP solver with the ingress class set to
 solvers = [{
   http01 = {
     ingress = {
-      class = "nginx"
+      ingressClassName = "nginx"
     }
   }
 }]
@@ -195,7 +195,7 @@ module "cert_manager" {
 | helm          |   ~> 3   |
 | alekc/kubectl |   ~> 2   |
 
-Cert Manager HELM Chart version: v1.17.2: https://artifacthub.io/packages/helm/cert-manager/cert-manager
+Cert Manager HELM Chart version: v1.19.0: https://artifacthub.io/packages/helm/cert-manager/cert-manager
 
 Source: https://github.com/jetstack/cert-manager
 

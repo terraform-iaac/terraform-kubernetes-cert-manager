@@ -11,7 +11,7 @@ variable "create_namespace" {
 variable "chart_version" {
   type        = string
   description = "HELM Chart Version for cert-manager"
-  default     = "1.17.2"
+  default     = "1.19.0"
 }
 
 variable "cluster_issuer_server" {
@@ -67,7 +67,7 @@ variable "solvers" {
   default = [{
     http01 = {
       ingress = {
-        class = "nginx"
+        ingressClassName = "nginx"
       }
     }
   }]
