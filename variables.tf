@@ -2,6 +2,11 @@ variable "namespace_name" {
   default = "cert-manager"
 }
 
+variable "use_namespace_v1" {
+  type    = bool
+  default = true
+}
+
 variable "create_namespace" {
   type        = bool
   description = "(Optional) Whether to create the namespace or use an existing one"

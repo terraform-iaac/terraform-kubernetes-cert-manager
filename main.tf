@@ -1,5 +1,16 @@
 resource "kubernetes_namespace" "cert_manager" {
-  count = var.create_namespace ? 1 : 0
+  count = var.create_namespace && !var.use_namespace_v1 ? 1 : 0
+
+  metadata {
+    annotations = {
+      name = var.namespace_name
+    }
+    name = var.namespace_name
+  }
+}
+
+resource "kubernetes_namespace_v1" "cert_manager" {
+  count = var.create_namespace && var.use_namespace_v1 ? 1 : 0
 
   metadata {
     annotations = {
@@ -13,7 +24,7 @@ resource "helm_release" "cert_manager" {
   chart      = "cert-manager"
   repository = "https://charts.jetstack.io"
   name       = "cert-manager"
-  namespace  = var.create_namespace ? kubernetes_namespace.cert_manager[0].id : var.namespace_name
+  namespace  = local.namespace
   version    = var.chart_version
 
   create_namespace = false
@@ -31,6 +42,8 @@ resource "helm_release" "cert_manager" {
     ],
     var.additional_set
   )
+
+  depends_on = [kubernetes_namespace.cert_manager, kubernetes_namespace_v1.cert_manager]
 }
 
 resource "time_sleep" "wait" {
@@ -46,7 +59,7 @@ resource "kubectl_manifest" "cluster_issuer" {
 
   yaml_body = var.cluster_issuer_yaml == null ? yamlencode(local.cluster_issuer) : var.cluster_issuer_yaml
 
-  depends_on = [kubernetes_namespace.cert_manager, helm_release.cert_manager, time_sleep.wait]
+  depends_on = [kubernetes_namespace.cert_manager, kubernetes_namespace_v1.cert_manager, helm_release.cert_manager, time_sleep.wait]
 }
 
 module "certificates" {
@@ -54,7 +67,7 @@ module "certificates" {
   source   = "./modules/_certificate"
 
   name                  = each.key
-  namespace             = try(each.value.namespace, var.namespace_name)
+  namespace             = try(each.value.namespace, local.namespace)
   annotations           = try(each.value.annotations, {})
   labels                = try(each.value.labels, {})
   secret_name           = try(each.value.secret_name, "${each.key}-tls")

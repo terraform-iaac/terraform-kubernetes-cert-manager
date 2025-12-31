@@ -4,6 +4,24 @@ Terraform module for Kubernetes Cert Manager
 Terraform module for deploying Cert Manager in Kubernetes with automatic certificate validation via HTTP ClusterIssuer.  
 Provides a simple and flexible interface.
 
+
+### Kubernetes provider v3 note
+
+Starting from Kubernetes provider v3, the `kubernetes_namespace` resource is deprecated.
+This module introduces optional support for `kubernetes_namespace_v1`.
+
+Existing users are not migrated automatically.
+To keep backward compatibility, the legacy resource is still supported and can be disabled explicitly.
+
+Existing users can either:
+- keep `use_namespace_v1 = false`
+- or migrate manually using:
+
+```bash
+terraform state rm 'module.cert_manager.kubernetes_namespace.cert_manager[0]'
+terraform import 'module.cert_manager.kubernetes_namespace_v1.cert_manager[0]' cert-manager
+```
+
 ## Usage
 
 ### Required Providers & Configuration
@@ -119,15 +137,16 @@ solvers = [
 ## Inputs
 
 ### General Settings
-| Name                     | Description                                                                           | Type                                                                                                            | Default -                                | Required |
-|--------------------------|---------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|------------------------------------------|:--------:|
-| namespace\_name          | Name of created namespace                                                             | `string`                                                                                                        | `cert-manager`                           |    no    |
-| create\_namespace        | Whether to create the namespace or use an existing one                                | `bool`                                                                                                          | `true`                                   |    no    |
-| chart\_version           | HELM Chart Version for cert-manager ( It is not recommended to change )               | `string`                                                                                                        | `1.17.2`                                 |    no    |
-| crds                     | This option decides if the CRDs should be installed as part of the Helm installation  | bool                                                                                                            | true                                     |    no    |
+| Name                     | Description                                                                          | Type                                                                                                            | Default -                                | Required |
+|--------------------------|--------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|------------------------------------------|:--------:|
+| namespace\_name          | Name of created namespace                                                            | `string`                                                                                                        | `cert-manager`                           |    no    |
+| use_namespace\_v1        | Use V1 namespace                                                                     | `bool`                                                                                                          | `false`                                  |    no    |
+| create\_namespace        | Whether to create the namespace or use an existing one                               | `bool`                                                                                                          | `true`                                   |    no    |
+| chart\_version           | HELM Chart Version for cert-manager ( It is not recommended to change )              | `string`                                                                                                        | `1.17.2`                                 |    no    |
+| crds                     | This option decides if the CRDs should be installed as part of the Helm installation | bool                                                                                                            | true                                     |    no    |
 | crds_keep                | This will prevent Helm from uninstalling the CRD when the Helm release is uninstalled | bool                                                                                                            | true                                     |    no    |
-| additional\_set          | Additional sets to Helm                                                               | <pre>list(object({<br>    name  = string<br>    value = string<br>    type  = string // Optional<br>  }))</pre> | `[]`                                     |    no    |
-| certificates             | List of certificates                                                                  | `any`                                                                                                           | refer to ["Certificates"](#certificates) |    no    |
+| additional\_set          | Additional sets to Helm                                                              | <pre>list(object({<br>    name  = string<br>    value = string<br>    type  = string // Optional<br>  }))</pre> | `[]`                                     |    no    |
+| certificates             | List of certificates                                                                 | `any`                                                                                                           | refer to ["Certificates"](#certificates) |    no    |
 
 ### ClusterIssuer Configuration
 | Name                                        | Description                                                                                                     | Type                | Default -                                                  | Required |
@@ -191,7 +210,7 @@ module "cert_manager" {
 | Name          | Version  |
 |---------------|:--------:|
 | terraform     | >= 1.0.0 |
-| kubernetes    |   ~> 2   |
+| kubernetes    |   >= 2   |
 | helm          |   ~> 3   |
 | alekc/kubectl |   ~> 2   |
 

@@ -1,4 +1,6 @@
 locals {
+  namespace = var.use_namespace_v1 ? kubernetes_namespace_v1.cert_manager[0].metadata[0].name : kubernetes_namespace.cert_manager[0].metadata[0].name
+
   cluster_issuer = {
     apiVersion = "cert-manager.io/v1"
     kind       = "ClusterIssuer"
