@@ -1,16 +1,5 @@
-resource "kubernetes_namespace" "cert_manager" {
-  count = var.create_namespace && !var.use_namespace_v1 ? 1 : 0
-
-  metadata {
-    annotations = {
-      name = var.namespace_name
-    }
-    name = var.namespace_name
-  }
-}
-
 resource "kubernetes_namespace_v1" "cert_manager" {
-  count = var.create_namespace && var.use_namespace_v1 ? 1 : 0
+  count = var.create_namespace ? 1 : 0
 
   metadata {
     annotations = {
@@ -36,7 +25,7 @@ resource "helm_release" "cert_manager" {
         value = var.crds
       },
       {
-        name = "crds.keep"
+        name  = "crds.keep"
         value = var.crds_keep
       }
     ],
